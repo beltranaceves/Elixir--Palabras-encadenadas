@@ -1,7 +1,5 @@
 # Todo App PWA
 
-[Live demo PWA](https://todo-as-beltran.herokuapp.com/)
-
-[Live demo PWA 2](https://todo-pwa.gigalixirapp.com/)
+[Live demo PWA](https://as-p3-palabras-encadenadas.gigalixirapp.com/)
 
 
