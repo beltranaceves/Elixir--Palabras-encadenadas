@@ -32,7 +32,7 @@ defmodule Todo.Server do
     {:ok, []}
   end
 
-  def handle_call({:list}, _from, state) when state !=nil do
+  def handle_call({:list}, _from, state) when state != nil do
     {:reply, state, state}
   end
 
@@ -50,25 +50,28 @@ defmodule Todo.Server do
 
   def handle_call({:toggle, tuple}, _from, state) when tuple.id != nil do
     case Enum.filter(state, fn x -> x.id == tuple.id end) do
-      [todo] -> toggled_todo = %{todo | done: !todo.done}
-                IO.inspect(todo.done)
-                new_state =
-                  state
-                  |> Enum.map(fn x ->
-                    if is_id?(x, tuple.id) do
-                      toggled_todo
-                    else
-                      x
-                    end
-                  end)
+      [todo] ->
+        toggled_todo = %{todo | done: !todo.done}
+        IO.inspect(todo.done)
 
-                {:reply, new_state, new_state}
-      [] -> IO.puts("No encontrado")
-            new_todo = %{name: tuple.name, done: tuple.done, id: generate_id()}
-            new_state = state ++ [new_todo]
-            {:reply, new_state, new_state}
+        new_state =
+          state
+          |> Enum.map(fn x ->
+            if is_id?(x, tuple.id) do
+              toggled_todo
+            else
+              x
+            end
+          end)
+
+        {:reply, new_state, new_state}
+
+      [] ->
+        IO.puts("No encontrado")
+        new_todo = %{name: tuple.name, done: tuple.done, id: generate_id()}
+        new_state = state ++ [new_todo]
+        {:reply, new_state, new_state}
     end
-    
   end
 
   def handle_call({:delete, id}, _from, state) do

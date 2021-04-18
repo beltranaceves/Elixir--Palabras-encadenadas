@@ -9,6 +9,7 @@ defmodule Todo.Application do
 
   def start(_type, _args) do
     var_port = get_port()
+
     children = [
       {Plug.Cowboy, scheme: :http, plug: Todo.Router, options: [port: var_port]},
       {Todo.Server, [name: Todo.Server]},
@@ -25,6 +26,7 @@ defmodule Todo.Application do
 
   defp get_port() do
     port_env_variable = System.get_env("PORT")
+
     if is_nil(port_env_variable) do
       3000
     else

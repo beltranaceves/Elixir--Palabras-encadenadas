@@ -7,19 +7,23 @@ defmodule Todo.Router do
   @template "priv/static/template.html.eex"
   @template_login "priv/static/template_login.html.eex"
 
-  plug(Plug.Static, from: :todo, at: "/static")  #Routing de contenido statico (css, js)
+  # Routing de contenido statico (css, js)
+  plug(Plug.Static, from: :todo, at: "/static")
   plug(:match)
   plug(:dispatch)
- 
-  
+
   get "/" do
     response = EEx.eval_file(@template_login)
     send_resp(conn, 200, response)
   end
 
   get "/service-worker.js" do
-    send_file(conn
-    |> put_resp_header("Content-Type", "text/javascript"), 200, "service-worker.js")
+    send_file(
+      conn
+      |> put_resp_header("Content-Type", "text/javascript"),
+      200,
+      "service-worker.js"
+    )
   end
 
   post "/" do
@@ -35,8 +39,20 @@ defmodule Todo.Router do
   post "/login" do
     response =
       read_login(conn)
-      |> Todo.LoginServer.check_login() #Por que aqui tengo que usar el prefijo Todo? Y no cuando llamo solo a Server?
-      |> build_response
+      |> Todo.LoginServer.check_login()      # Por que aqui tengo que usar el prefijo Todo? Y no cuando llamo solo a Server?
+
+    case response["state"] do
+      "no_user" ->
+        IO.puts("No user")
+
+      "incorrect_pwd" ->
+        IO.puts("Incorrect_pwd")
+
+      "ok" ->
+        response =
+          response
+          |> build_response
+    end
 
     send_resp(conn, 200, response)
   end
@@ -60,7 +76,7 @@ defmodule Todo.Router do
   end
 
   match(_, do: send_resp(conn, 404, "This is not the page you are looking for"))
-  
+
   defp read_input(conn) do
     {:ok, body, _conn} = read_body(conn)
     "item=" <> item = body
@@ -70,22 +86,27 @@ defmodule Todo.Router do
   defp read_login(conn) do
     {:ok, body, _conn} = read_body(conn)
     split_body = String.split(body, "&")
-    IO.inspect split_body
-    "username=" <> username = Enum.at(split_body, 0) 
-                      |> String.replace("+", " ")
-    "pwd=" <> pwd = Enum.at(split_body, 1) 
-                      |> String.replace("+", " ")
-    user = %{username: username, pwd: pwd}
-    IO.inspect user
-    user
+
+    "username=" <> username =
+      Enum.at(split_body, 0)
+      |> String.replace("+", " ")
+
+    "pwd=" <> pwd =
+      Enum.at(split_body, 1)
+      |> String.replace("+", " ")
+
+    %{username: username, pwd: pwd}
   end
 
   defp read_input_tuple(conn) do
     {:ok, body, _conn} = read_body(conn)
     split_body = String.split(body, "&")
     "item=" <> item = Enum.at(split_body, 0)
-    "name=" <> name = Enum.at(split_body, 1) 
-                      |> String.replace("+", " ")
+
+    "name=" <> name =
+      Enum.at(split_body, 1)
+      |> String.replace("+", " ")
+
     "done=" <> done = Enum.at(split_body, 2)
     %{id: item, name: name, done: done}
   end
