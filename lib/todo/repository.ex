@@ -56,7 +56,7 @@ defmodule Todo.Repository do
 
   def handle_call({:drop}, _from, state) when state != nil do
     statement = "DROP TABLE IF EXISTS users;"
-    result = state["db"] |> Postgrex.query!(statement, [])
+    state["db"] |> Postgrex.query!(statement, [])
     {:noreply, state}
   end
 

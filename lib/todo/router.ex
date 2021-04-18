@@ -41,7 +41,7 @@ defmodule Todo.Router do
       read_login(conn)
       |> Todo.LoginServer.check_login()      # Por que aqui tengo que usar el prefijo Todo? Y no cuando llamo solo a Server?
 
-    case response["state"] do
+    response = case response["state"] do
       "no_user" ->
         IO.puts("No user")
 
@@ -49,8 +49,7 @@ defmodule Todo.Router do
         IO.puts("Incorrect_pwd")
 
       "ok" ->
-        response =
-          response
+        response
           |> build_response
     end
 
