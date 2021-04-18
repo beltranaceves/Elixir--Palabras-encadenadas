@@ -10,6 +10,10 @@ defmodule Todo.Server do
     GenServer.call(__MODULE__, {:list})
   end
 
+  def first() do
+    GenServer.call(__MODULE__, {:first})
+  end
+
   def add(todo) do
     GenServer.call(__MODULE__, {:add, todo})
   end
@@ -30,6 +34,12 @@ defmodule Todo.Server do
 
   def handle_call({:list}, _from, state) when state !=nil do
     {:reply, state, state}
+  end
+
+  def handle_call({:first}, _from, state) do
+    historial = []
+    respuesta = []
+    {:reply, {historial, respuesta}, state}
   end
 
   def handle_call({:add, todo}, _from, state) do

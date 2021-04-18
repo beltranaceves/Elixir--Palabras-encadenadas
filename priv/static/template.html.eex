@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<title>AS Todo App</title>
+		<title>Palabras Encadenadas</title>
 		<meta  charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#eba653"/>
+    	<meta name="theme-color" content="#eba653"/>
 		<meta name="description" content="
 		Author: Beltran Aceves,
 		Description: Simple Todo PWA with Elixir backend">
@@ -24,28 +24,30 @@
 	</head>
 	<body>
 		<script>
-			if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./service-worker.js')
-        .then(function (registration)
-        {
-          console.log('Service worker registered successfully');
-        }).catch(function (e)
-        {
-          console.error('Error during service worker registration:', e);
-        });
-			}
+				if ('serviceWorker' in navigator) {
+					navigator.serviceWorker.register('./service-worker.js')
+						.then(function (registration) {
+							console.log('Service worker registered successfully');
+						}
+						).catch(function (e) {
+							console.error('Error during service worker registration:', e);
+						}
+						);	
+				}
 		</script>
 		<header>
-		<h1>Lista de tareas</h1>
+		<h1>Palabras Encadenadas</h1>
+		<h2><%= todos %></h2>
 		</header>
 		<div class="center-div">
 			<form method="POST" action="/">
 				<input type="text"
 					id="new-item"
+					placeholder="Respuesta"
 					name="item"
 					pattern=".{3,}"
 					required
-					aria-label="Write a new todo item"
+					aria-label="Respuesta"
 					title="3 characters minimum"/>
 				<button class="todo-button" type="submit" value="Add new item" id="add-new-item" aria-label="Add new Todo item">
 				<i class="fas fa-plus-square"></i>
@@ -53,45 +55,12 @@
 			</form>
 		</div>
 		<div class="todo-container">
-		
 			<%=  for todo <- todos do  %>
-			<ul class="todo-list">
-			<div class="todo" style="display: flex;">
-				<%=  if todo.done do  %>
-				<li  class="todo-item"><s><%= todo.name %></s></li>
-				<form  method="POST"  action="toggle" style="visibility: hidden;">
-					<input  type="hidden"  name="item"  value="<%= todo.id %>">
-					<input  type="hidden"  name="name"  value="<%= todo.name %>">
-					<input  type="hidden"  name="done"  value="false">
-					<button class="complete-btn incomplete" type="submit" value="Not Done" aria-label="Mark item as done" style="visibility: visible;">
-					<i class="fas fa-check"></i>
-					</button>
-				</form>
-				<form  method="POST"  action="delete" style="visibility: hidden;">
-					<input  type="hidden"  name="item"  value="<%= todo.id %>">
-					<button class="trash-btn delete" type="submit" value="Remove" aria-label="Remove item" style="visibility: visible;">
-					<i class="fas fa-trash"></i>
-					</button>
-				</form>
-				<%  else  %>
-				<li  class="todo-item"><%= todo.name %></li>
-				<form  method="POST"  action="toggle" style="visibility: hidden;">
-					<input  type="hidden"  name="item"  value="<%= todo.id %>">
-					<input  type="hidden"  name="name"  value="<%= todo.name %>">
-					<input  type="hidden"  name="done"  value="true">
-					<button class="complete-btn incomplete" type="submit" value="Done" aria-label="Mark item as done" style="visibility: visible;">
-					<i class="fas fa-check"></i>
-					</button>
-				</form>
-				<form  method="POST"  action="delete" style="visibility: hidden;">
-					<input  type="hidden"  name="item"  value="<%= todo.id %>">
-					<button class="trash-btn delete" type="submit" value="Remove" aria-label="Delete item" style="visibility: visible;">
-					<i class="fas fa-trash"></i>
-					</button>
-				</form>
-				<%  end  %>
-			</div>
-			</ul>
+				<ul class="todo-list">
+					<div class="todo" style="display: flex;">
+						<li  class="todo-item"><s><%= todo.name %></s></li>
+					</div>
+				</ul>
 			<%  end  %>
 		</div>
 	</body>

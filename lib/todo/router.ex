@@ -12,7 +12,8 @@ defmodule Todo.Router do
  
   
   get "/" do
-    todos = Server.list()
+    {historial, respuesta} = Server.first()
+    todos = []
     response = EEx.eval_file(@template, todos: todos)
     send_resp(conn, 200, response)
   end

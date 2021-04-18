@@ -25,7 +25,8 @@ defmodule Todo.MixProject do
     [
       {:cowboy, "~> 2.6"},
       {:plug_cowboy, "~> 2.0"},
-      {:plug, "~> 1.7"}
+      {:plug, "~> 1.7"},
+      {:postgrex, "~> 0.15.7"}
     ]
   end
 end
