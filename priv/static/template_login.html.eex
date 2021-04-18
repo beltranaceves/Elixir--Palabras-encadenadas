@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<title>Palabras Encadenadas</title>
+		<meta  charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    	<meta name="theme-color" content="#eba653"/>
+		<meta name="description" content="
+		Author: Beltran Aceves,
+		Description: Simple Todo PWA with Elixir backend">
+		<link rel="icon" type="image/x-icon" href="./static/icon.png" />
+		<link
+		href="https://fonts.googleapis.com/css?family=Poppins&display=swap"
+		rel="stylesheet"
+		/>
+		<link
+		rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+		integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
+		crossorigin="anonymous"
+		/>
+		<link rel="stylesheet"  href="./static/todo.css"/>
+		<link defer rel="manifest" href="./static/manifest.json"/>
+	</head>
+	<body>
+		<script>
+				if ('serviceWorker' in navigator) {
+					navigator.serviceWorker.register('./service-worker.js')
+						.then(function (registration) {
+							console.log('Service worker registered successfully');
+						}
+						).catch(function (e) {
+							console.error('Error during service worker registration:', e);
+						}
+						);	
+				}
+		</script>
+		<header>
+		<h1>Palabras Encadenadas</h1>
+		</header>
+		<div class="center-div" id="login-div">
+			<h2>Login</h2>
+			<form method="POST" action="/login" id="login-form">
+				<input type="text"
+					id="username"
+					placeholder="Nombre"
+					name="username"
+					pattern=".{3,}"
+					required
+					aria-label="Respuesta"
+					title="3 characters minimum"/>
+				<input type="text"
+					id="pwd"
+					placeholder="Contraseña"
+					name="pwd"
+					pattern=".{3,}"
+					required
+					aria-label="Respuesta"
+					title="3 characters minimum"/>
+				<div class="button-div">
+					<button class="todo-button" type="submit" value="Add new item" id="add-new-item" aria-label="Add new Todo item">
+						Siguiente
+						<i class="fas fa-plus-square"></i>	
+					</button>
+							
+				</div>
+				</button>
+			</form>
+		</div>
+	</body>
+</html>

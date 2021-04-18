@@ -144,6 +144,29 @@ select {
 }
 */
 
+.center-div {
+  text-align: center;
+}
+
+
+#login-form {
+  display: inline-grid;
+}
+
+#login-div {
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  width: min-content;
+  border-style: solid;
+  border-color: #000000;
+  background-image: linear-gradient(
+    270deg
+    , #f6d365 0%, #fda085 100%);
+  border-radius: 2%;
+}
+
 @media only screen and (max-width: 600px) {
   #new-item {
     width: 80vw;

@@ -6,8 +6,8 @@ defmodule Todo.LoginServer do
       GenServer.start_link(__MODULE__, :ok, opts)
     end
   
-    def list() do
-      GenServer.call(__MODULE__, {:list})
+    def check_login(user) do
+      GenServer.call(__MODULE__, {:check_login, user})
     end
   
     # Server
@@ -16,8 +16,19 @@ defmodule Todo.LoginServer do
       {:ok, []}
     end
   
-    def handle_call({:list}, _from, state) when state !=nil do
-      {:reply, state, state}
+    def handle_call({:check_login, user}, _from, state) when state !=nil do
+        user_row = Todo.Repository.select_user(user.username) #Por que aqui tengo que usar el prefijo Todo? Y no cuando llamo solo a Server?
+        IO.inspect user_row
+        response = case user_row do
+            [] -> 
+                {:error, :no_user, state}
+            [[username, pwd]] -> 
+                if (username == user.username) and (pwd == user.pwd) do
+                    {:reply, user, state}
+                else 
+                    {:error, :incorrect_pwd, state}
+                end
+        end
     end
 
 

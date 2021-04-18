@@ -5,6 +5,7 @@ defmodule Todo.Router do
   alias Todo.Server
 
   @template "priv/static/template.html.eex"
+  @template_login "priv/static/template_login.html.eex"
 
   plug(Plug.Static, from: :todo, at: "/static")  #Routing de contenido statico (css, js)
   plug(:match)
@@ -12,9 +13,7 @@ defmodule Todo.Router do
  
   
   get "/" do
-    {historial, respuesta} = Server.first()
-    todos = []
-    response = EEx.eval_file(@template, todos: todos)
+    response = EEx.eval_file(@template_login)
     send_resp(conn, 200, response)
   end
 
@@ -28,6 +27,15 @@ defmodule Todo.Router do
       read_input(conn)
       |> String.replace("+", " ")
       |> Server.add()
+      |> build_response
+
+    send_resp(conn, 200, response)
+  end
+
+  post "/login" do
+    response =
+      read_login(conn)
+      |> Todo.LoginServer.check_login() #Por que aqui tengo que usar el prefijo Todo? Y no cuando llamo solo a Server?
       |> build_response
 
     send_resp(conn, 200, response)
@@ -52,11 +60,24 @@ defmodule Todo.Router do
   end
 
   match(_, do: send_resp(conn, 404, "This is not the page you are looking for"))
-
+  
   defp read_input(conn) do
     {:ok, body, _conn} = read_body(conn)
     "item=" <> item = body
     item
+  end
+
+  defp read_login(conn) do
+    {:ok, body, _conn} = read_body(conn)
+    split_body = String.split(body, "&")
+    IO.inspect split_body
+    "username=" <> username = Enum.at(split_body, 0) 
+                      |> String.replace("+", " ")
+    "pwd=" <> pwd = Enum.at(split_body, 1) 
+                      |> String.replace("+", " ")
+    user = %{username: username, pwd: pwd}
+    IO.inspect user
+    user
   end
 
   defp read_input_tuple(conn) do

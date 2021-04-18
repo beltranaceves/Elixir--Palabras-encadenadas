@@ -11,7 +11,9 @@ defmodule Todo.Application do
     var_port = get_port()
     children = [
       {Plug.Cowboy, scheme: :http, plug: Todo.Router, options: [port: var_port]},
-      {Todo.Server, [name: Todo.Server]}
+      {Todo.Server, [name: Todo.Server]},
+      {Todo.LoginServer, [name: Todo.LoginServer]},
+      {Todo.Repository, [name: Todo.Repository]}
     ]
 
     Logger.info("Starting application on port #{var_port}.")

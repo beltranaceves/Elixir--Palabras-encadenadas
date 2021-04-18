@@ -2,8 +2,8 @@ defmodule Todo.Repository do
     use GenServer
   
     # Client
-    def start_link() do
-        GenServer.start_link(__MODULE__, :ok, [name: Todo.Repository])
+    def start_link(opts) do
+        GenServer.start_link(__MODULE__, :ok, opts)
     end
   
     def create_tables() do
@@ -22,12 +22,12 @@ defmodule Todo.Repository do
         GenServer.call(__MODULE__, {:select_user, username})
     end
 
-    def query(query) do
-        GenServer.call(__MODULE__, {:query, query})
+    def select_words() do
+        GenServer.call(__MODULE__, {:select_words})
     end
 
-    def list() do
-      GenServer.call(__MODULE__, {:list})
+    def query(query) do
+        GenServer.call(__MODULE__, {:query, query})
     end
   
     # Server
@@ -39,10 +39,6 @@ defmodule Todo.Repository do
         database: "cfb90dd3-5abc-4a77-baa0-5017b6d08537")
         {:ok, %{"db" => db_pid}}
     end
-  
-    def handle_call({:list}, _from, state) when state !=nil do
-      {:reply, state, state}
-    end
 
     def handle_call({:create}, _from, state) when state !=nil do
         statement = "CREATE TABLE users (
@@ -51,39 +47,41 @@ defmodule Todo.Repository do
           );
           "
         result = state["db"] |> Postgrex.query!(statement, [])
-        IO.inspect result
-        {:reply, state, state}
+        {:noreply, state}
     end
 
     def handle_call({:drop}, _from, state) when state !=nil do
         statement = "DROP TABLE IF EXISTS users;"
         result = state["db"] |> Postgrex.query!(statement, [])
         IO.inspect result
-        {:reply, state, state}
+        {:noreply, state}
     end
 
     def handle_call({:insert, user}, _from, state) when state !=nil do
         statement = "INSERT INTO
             users(username, pwd)
             VALUES
-            ('#{user["username"]}'', '#{user["pwd"]}'');"
+            ('#{user["username"]}', '#{user["pwd"]}');"
         result = state["db"] |> Postgrex.query!(statement, [])
-        IO.inspect result
-        {:reply, state, state}
+        {:noreply, state}
     end
 
     def handle_call({:select_user, username}, _from, state) when state !=nil do
-        statement = "SELECT * FROM users WHERE username = #{username}"
+        statement = "SELECT * FROM users WHERE username = '#{username}'"
         result = state["db"] |> Postgrex.query!(statement, [])
-        IO.inspect result
-        {:reply, state, state}
+        {:reply, result.rows, state}
+    end
+
+    def handle_call({:select_words}, _from, state) when state !=nil do  #TODO: meter la lista de palabras en la BD, indexarlas y hacer la consulta
+        {:ok, contents} = File.read("priv/static/lista_palabras.txt")
+        word_list = contents |> String.split(["\n", "\r"], trim: true)
+        {:reply, word_list, state}
     end
 
     def handle_call({:query, query}, _from, state) when state !=nil do
         statement = query
         result = state["db"] |> Postgrex.query!(statement, [])
-        IO.inspect result.rows
-        {:reply, state, state}
+        {:reply, result.rows, state}
     end
 
   end
