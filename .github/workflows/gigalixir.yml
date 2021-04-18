@@ -1,8 +1,9 @@
 name: Gigalixir CD
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ master ]
 jobs:
   docker:
     runs-on: ubuntu-latest
