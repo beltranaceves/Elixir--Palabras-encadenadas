@@ -20,17 +20,19 @@ defmodule Todo.LoginServer do
     # Por que aqui tengo que usar el prefijo Todo? Y no cuando llamo solo a Server?
     user_row = Todo.Repository.select_user(user.username)
 
-    user = case user_row do
-      [] ->
-        user |> Map.put("state", "no_user")
+    user =
+      case user_row do
+        [] ->
+          user |> Map.put("state", "no_user")
 
-      [[username, pwd]] ->
-        if username == user.username and pwd == user.pwd do
-          user |> Map.put("state", "ok")
-        else
-          user |> Map.put("state", "incorrect_pwd")
-        end
-    end
+        [[username, pwd]] ->
+          if username == user.username and pwd == user.pwd do
+            user |> Map.put("state", "ok")
+          else
+            user |> Map.put("state", "incorrect_pwd")
+          end
+      end
+
     {:reply, user, state}
   end
 end

@@ -14,6 +14,7 @@ defmodule Todo.Application do
       {Plug.Cowboy, scheme: :http, plug: Todo.Router, options: [port: var_port]},
       {Todo.Server, [name: Todo.Server]},
       {Todo.LoginServer, [name: Todo.LoginServer]},
+      {Todo.GameServer, [name: Todo.GameServer]},
       {Todo.Repository, [name: Todo.Repository]}
     ]
 

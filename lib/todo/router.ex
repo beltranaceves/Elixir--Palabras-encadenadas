@@ -2,7 +2,7 @@ defmodule Todo.Router do
   use Plug.Router
   require EEx
 
-  alias Todo.Server
+  #alias Todo.Server TODO: usar alias para todos los modulos con prefijo Todo.
 
   @template "priv/static/template.html.eex"
   @template_login "priv/static/template_login.html.eex"
@@ -26,70 +26,75 @@ defmodule Todo.Router do
     )
   end
 
-  post "/" do
-    response =
-      read_input(conn)
-      |> String.replace("+", " ")
-      |> Server.add()
-      |> build_response
-
-    send_resp(conn, 200, response)
-  end
-
   post "/login" do
     response =
       read_login(conn)
-      |> Todo.LoginServer.check_login()      # Por que aqui tengo que usar el prefijo Todo? Y no cuando llamo solo a Server?
+      # Por que aqui tengo que usar el prefijo Todo? Y no cuando llamo solo a Server?
+      |> Todo.LoginServer.check_login()
 
-    built_response = case response["state"] do
-      "no_user" ->
-        IO.puts("No user")
-        response
+    built_response =
+      case response["state"] do
+        "no_user" ->
+          IO.puts("No user")
+
+          response
           |> build_error
 
-      "incorrect_pwd" ->
-        IO.puts("Incorrect_pwd")
-        response
+        "incorrect_pwd" ->
+          IO.puts("Incorrect_pwd")
+
+          response
           |> build_error
 
-      "ok" ->
-        response
+        "ok" ->
+          {historial, siguiente} = Todo.GameServer.first()
+
+          response
+          |> Map.put("historial", historial)
+          |> Map.put("siguiente", siguiente)
           |> build_response
-    end
+      end
+      send_resp(conn, 200, built_response)
+  end
+
+  post "/respuesta" do
+    response =
+      read_login(conn)
+      # Por que aqui tengo que usar el prefijo Todo? Y no cuando llamo solo a Server?
+      |> Todo.LoginServer.check_login()
+
+    built_response =
+      case response["state"] do
+        "no_user" ->
+          IO.puts("No user")
+
+          response
+          |> build_error
+
+        "incorrect_pwd" ->
+          IO.puts("Incorrect_pwd")
+
+          response
+          |> build_error
+
+        "ok" ->
+          {historial, siguiente} = Todo.GameServer.first()
+
+          response
+          |> Map.put("historial", historial)
+          |> Map.put("siguiente", siguiente)
+          |> build_response
+      end
 
     send_resp(conn, 200, built_response)
   end
 
-  post "/toggle" do
-    response =
-      read_input_tuple(conn)
-      |> Server.toggle()
-      |> build_response
-
-    send_resp(conn, 200, response)
-  end
-
-  post "/delete" do
-    response =
-      read_input(conn)
-      |> Server.remove()
-      |> build_response
-
-    send_resp(conn, 200, response)
-  end
-
   match(_, do: send_resp(conn, 404, "This is not the page you are looking for"))
 
-  defp read_input(conn) do
-    {:ok, body, _conn} = read_body(conn)
-    "item=" <> item = body
-    item
-  end
 
   defp read_login(conn) do
     {:ok, body, _conn} = read_body(conn)
     split_body = String.split(body, "&")
-
     "username=" <> username =
       Enum.at(split_body, 0)
       |> String.replace("+", " ")
@@ -101,24 +106,18 @@ defmodule Todo.Router do
     %{username: username, pwd: pwd}
   end
 
-  defp read_input_tuple(conn) do
-    {:ok, body, _conn} = read_body(conn)
-    split_body = String.split(body, "&")
-    "item=" <> item = Enum.at(split_body, 0)
-
-    "name=" <> name =
-      Enum.at(split_body, 1)
-      |> String.replace("+", " ")
-
-    "done=" <> done = Enum.at(split_body, 2)
-    %{id: item, name: name, done: done}
-  end
-
   defp build_error(response) do
     EEx.eval_file(@template_login, todos: [], error: response["state"])
   end
 
-  defp build_response(todos) do
-    EEx.eval_file(@template, todos: todos, error: "")
+  defp build_response(response) do
+    IO.inspect response
+    EEx.eval_file(@template,
+      historial: response["historial"],
+      siguiente: response["siguiente"],
+      credenciales: [
+        response.username, response.pwd
+      ]
+    )
   end
 end

@@ -37,28 +37,34 @@
 		</script>
 		<header>
 		<h1>Palabras Encadenadas</h1>
-		<h2><%= todos %></h2>
 		</header>
 		<div class="center-div">
-			<form method="POST" action="/">
+			<h2>La palabra es:<h2>
+			<h2><%= siguiente %></h2>
+			<form method="POST" action="/respuesta">
+				<input type="hidden" name="username" value="<%= credenciales |> Enum.at(0) %>">
+				<input type="hidden" name="pwd" value="<%= credenciales |> Enum.at(1) %>">
 				<input type="text"
 					id="new-item"
 					placeholder="Respuesta"
-					name="item"
+					name="respuesta"
 					pattern=".{3,}"
 					required
 					aria-label="Respuesta"
 					title="3 characters minimum"/>
+				<%=  for entrada <- historial do  %>
+					<input type="hidden" name="entrada" value="<%= entrada %>">
+				<%  end  %>
 				<button class="todo-button" type="submit" value="Add new item" id="add-new-item" aria-label="Add new Todo item">
 				<i class="fas fa-plus-square"></i>
 				</button>
 			</form>
 		</div>
 		<div class="todo-container">
-			<%=  for todo <- todos do  %>
+			<%=  for entrada <- historial do  %>
 				<ul class="todo-list">
 					<div class="todo" style="display: flex;">
-						<li  class="todo-item"><s><%= todo.name %></s></li>
+						<li  class="todo-item"><%= entrada %></li>
 					</div>
 				</ul>
 			<%  end  %>
