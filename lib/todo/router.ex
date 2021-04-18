@@ -13,7 +13,7 @@ defmodule Todo.Router do
   plug(:dispatch)
 
   get "/" do
-    response = EEx.eval_file(@template_login)
+    response = EEx.eval_file(@template_login, error: "")
     send_resp(conn, 200, response)
   end
 
@@ -41,19 +41,23 @@ defmodule Todo.Router do
       read_login(conn)
       |> Todo.LoginServer.check_login()      # Por que aqui tengo que usar el prefijo Todo? Y no cuando llamo solo a Server?
 
-    response = case response["state"] do
+    built_response = case response["state"] do
       "no_user" ->
         IO.puts("No user")
+        response
+          |> build_error
 
       "incorrect_pwd" ->
         IO.puts("Incorrect_pwd")
+        response
+          |> build_error
 
       "ok" ->
         response
           |> build_response
     end
 
-    send_resp(conn, 200, response)
+    send_resp(conn, 200, built_response)
   end
 
   post "/toggle" do
@@ -110,7 +114,11 @@ defmodule Todo.Router do
     %{id: item, name: name, done: done}
   end
 
+  defp build_error(response) do
+    EEx.eval_file(@template_login, todos: [], error: response["state"])
+  end
+
   defp build_response(todos) do
-    EEx.eval_file(@template, todos: todos)
+    EEx.eval_file(@template, todos: todos, error: "")
   end
 end

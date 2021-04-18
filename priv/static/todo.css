@@ -148,6 +148,9 @@ select {
   text-align: center;
 }
 
+.error {
+  color: red;
+}
 
 #login-form {
   display: inline-grid;

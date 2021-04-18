@@ -40,6 +40,7 @@
 		</header>
 		<div class="center-div" id="login-div">
 			<h2>Login</h2>
+			<h2 class="error"><%= error %></h2>
 			<form method="POST" action="/login" id="login-form">
 				<input type="text"
 					id="username"
@@ -49,7 +50,7 @@
 					required
 					aria-label="Respuesta"
 					title="3 characters minimum"/>
-				<input type="text"
+				<input type="password"
 					id="pwd"
 					placeholder="Contraseña"
 					name="pwd"
@@ -62,7 +63,6 @@
 						Siguiente
 						<i class="fas fa-plus-square"></i>	
 					</button>
-							
 				</div>
 				</button>
 			</form>
