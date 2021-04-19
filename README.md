@@ -1,3 +1,3 @@
-# Todo App PWA
+# Palabras Encadenadas PWA
 
-[Live demo PWA](https://as-p3-palabras-encadenadas.gigalixirapp.com/)
+[Live demo](https://as-p3-palabras-encadenadas.gigalixirapp.com/)
