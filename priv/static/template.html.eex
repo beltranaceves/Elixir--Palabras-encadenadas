@@ -41,14 +41,15 @@
 		<div class="center-div">
 			<h2>La palabra es:<h2>
 			<h2><%= siguiente %></h2>
+			<h2 class="error"><%= error %></h2>
 			<form method="POST" action="/respuesta">
 				<input type="hidden" name="username" value="<%= credenciales |> Enum.at(0) %>">
 				<input type="hidden" name="pwd" value="<%= credenciales |> Enum.at(1) %>">
 				<input type="text"
 					id="new-item"
 					placeholder="Respuesta"
-					name="respuesta"
-					pattern=".{3,}"
+					name="question"
+					pattern=".{1,}"
 					required
 					aria-label="Respuesta"
 					title="3 characters minimum"/>
@@ -61,6 +62,7 @@
 			</form>
 		</div>
 		<div class="todo-container">
+			<h2>Historial</h2>
 			<%=  for entrada <- historial do  %>
 				<ul class="todo-list">
 					<div class="todo" style="display: flex;">
@@ -69,5 +71,8 @@
 				</ul>
 			<%  end  %>
 		</div>
+		<form action="/">
+			<button type="submit" class="btn btn-primary">Logout</button>
+		</form>
 	</body>
 </html>
