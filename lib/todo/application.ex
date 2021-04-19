@@ -25,7 +25,7 @@ defmodule Todo.Application do
     Supervisor.start_link(children, opts)
   end
 
-  defp get_port() do
+  defp get_port() do #TODO: fix bug siempre intenta abrir el puerto 3000, aunque haga la comprobacion
 
     if is_nil(System.get_env("PORT")) do
       3000
