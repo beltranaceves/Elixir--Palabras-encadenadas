@@ -26,12 +26,11 @@ defmodule Todo.Application do
   end
 
   defp get_port() do
-    port_env_variable = System.get_env("PORT")
 
-    if is_nil(port_env_variable) do
+    if is_nil(System.get_env("PORT")) do
       3000
     else
-      String.to_integer(port_env_variable)
+      String.to_integer(System.get_env("PORT"))
     end
   end
 end
