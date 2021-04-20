@@ -52,7 +52,7 @@
 					pattern=".{1,}"
 					required
 					aria-label="Respuesta"
-					title="3 characters minimum"/>
+					accept-charset="UTF-8"/>
 				<%=  for entrada <- historial do  %>
 					<input type="hidden" name="entrada" value="<%= entrada %>">
 				<%  end  %>
