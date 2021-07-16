@@ -3,12 +3,14 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
   color: white;
   font-family: "Poppins", sans-serif;
   min-height: 100vh;
 }
+
 header {
   font-size: 2rem;
   text-align: center;
@@ -21,23 +23,35 @@ form {
   justify-content: center;
   align-items: center;
 }
+
+form input {
+  max-width: 88vw;
+}
+
 form input,
-form button {
+button {
   padding: 0.5rem;
   font-size: 2rem;
   border: none;
   background: white;
 }
-form button {
+
+button {
   color: #ff6f47;
   background: #f7fffe;
   cursor: pointer;
   transition: all 0.3s ease;
 }
-form button:hover {
+
+button:hover {
   background: #ff6f47;
   color: white;
 }
+
+.form-button {
+  border-radius: 1vw;
+}
+
 .todo-container {
   display: grid;
   justify-content: center;
@@ -48,7 +62,7 @@ form button:hover {
   min-width: 30%;
   list-style: none;
   display: contents;
-  white-space:nowrap;
+  white-space: nowrap;
 }
 
 .todo {
@@ -62,9 +76,11 @@ form button:hover {
   align-items: center;
   transition: all 1s ease;
 }
+
 .filter-todo {
   padding: 1rem;
 }
+
 .todo li {
   flex: 1;
   max-width: 70vw;
@@ -80,9 +96,11 @@ form button:hover {
   cursor: pointer;
   font-size: 1rem;
 }
+
 .complete-btn {
   background: rgb(11, 212, 162);
 }
+
 .todo-item {
   padding: 0rem 0.5rem;
 }
@@ -120,12 +138,14 @@ select {
   position: relative;
   overflow: hidden;
 }
+
 select {
   color: #ff6f47;
   font-family: "Poppins", sans-serif;
   cursor: pointer;
   width: 12rem;
 }
+
 /* Arrow */
 .select::after {
   content: "\25BC";
@@ -137,6 +157,7 @@ select {
   cursor: pointer;
   pointer-events: none;
 }
+
 /* Transition */
 /*
 .select:hover::after {
@@ -152,30 +173,131 @@ select {
   color: red;
 }
 
+.signup-link {
+  min-height: 8vh;
+}
+
+.login-flex {
+  display: flex;
+  justify-content: center;
+}
+
 #login-form {
   display: inline-grid;
 }
 
 #login-div {
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
   width: min-content;
   border-style: solid;
   border-color: #000000;
-  background-image: linear-gradient(
-    270deg
-    , #f6d365 0%, #fda085 100%);
+  background-image: linear-gradient(270deg, #f6d365 0%, #fda085 100%);
+  border-radius: 2%;
+  max-width: 90vw;
+}
+
+#history-container {
+  display: flex;
+  justify-content: center;
+}
+
+#history-div {
+  width: min-content;
+  min-width: 20vw;
+  border-style: solid;
+  border-color: #000000;
+  background-image: linear-gradient(270deg, #f6d365 0%, #fda085 100%);
   border-radius: 2%;
 }
 
+input[type='checkbox'] {
+  display: none;
+}
+
+.wrap-collabsible {
+  margin: 1.2rem 0;
+}
+
+.lbl-toggle {
+  display: inline;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 1rem;
+  color: #DDD;
+  background: #ff6f47;
+  cursor: pointer;
+  border-radius: 7px;
+  transition: all 0.25s ease-out;
+  width: 30%;
+}
+
+.lbl-toggle:hover {
+  color: #FFF;
+}
+
+.lbl-toggle::before {
+  content: ' ';
+  display: inline-block;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid currentColor;
+  vertical-align: middle;
+  margin-right: .7rem;
+  transform: translateY(-2px);
+  transition: transform .2s ease-out;
+}
+
+.toggle:checked+.lbl-toggle::before {
+  transform: rotate(90deg) translateX(-3px);
+}
+
+.collapsible-content {
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height .25s ease-in-out;
+}
+
+.toggle:checked+.lbl-toggle+.collapsible-content {
+  max-height: 350px;
+}
+
+.toggle:checked+.lbl-toggle {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.collapsible-content .content-inner {
+  background: rgba(0, 105, 255, .2);
+  border-bottom: 1px solid rgba(0, 105, 255, .45);
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  padding: .5rem 1rem;
+  width: 30%;
+  display: inline-block;
+  margin-top: 1.2%;
+}
+
+.collapsible-content p {
+  margin-bottom: 0;
+}
+
 @media only screen and (max-width: 600px) {
+  h1 {
+    font-size: 1.5em;
+  }
+
   #new-item {
     width: 80vw;
   }
+
   .todo li {
     overflow: scroll;
   }
-}
 
+  .collapsible-content .content-inner {
+    display: table-cell;
+    margin-top: 1.2%;
+  }
+}

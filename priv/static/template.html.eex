@@ -6,8 +6,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
     	<meta name="theme-color" content="#eba653"/>
 		<meta name="description" content="
-		Author: Beltran Aceves,
-		Description: Simple Todo PWA with Elixir backend">
+		Authors: Beltran Aceves Gil,
+		Martín Cabana Fernández,
+		Alexandre Maneiro Jueguen,
+		Alan Xes López Fernández, 
+		Cristina martin Gonzalez,
+		Roberto Pais Karandeniya-hewage,
+		Javier Cancela Mato,
+		Description: Simple WordChain PWA with Elixir backend">
 		<link rel="icon" type="image/x-icon" href="./static/icon.png" />
 		<link
 		href="https://fonts.googleapis.com/css?family=Poppins&display=swap"
@@ -19,10 +25,10 @@
 		integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
 		crossorigin="anonymous"
 		/>
-		<link rel="stylesheet"  href="./static/todo.css"/>
+		<link rel="stylesheet"  href="./static/word_chain.css"/>
 		<link defer rel="manifest" href="./static/manifest.json"/>
 	</head>
-	<body>
+	<body class="center-div">
 		<script>
 				if ('serviceWorker' in navigator) {
 					navigator.serviceWorker.register('./service-worker.js')
@@ -34,6 +40,14 @@
 						}
 						);	
 				}
+
+				self.addEventListener('fetch', function (event) {
+					event.respondWith(
+						caches.match(event.request).then(function (response) {
+						return response || fetch(event.request);
+						}),
+					);
+				});
 		</script>
 		<header>
 		<h1>Palabras Encadenadas</h1>
@@ -42,7 +56,7 @@
 			<h2>La palabra es:<h2>
 			<h2><%= siguiente %></h2>
 			<h2 class="error"><%= error %></h2>
-			<form method="POST" action="/respuesta">
+			<form method="POST" action="/respuesta" autocomplete="off">
 				<input type="hidden" name="username" value="<%= credenciales |> Enum.at(0) %>">
 				<input type="hidden" name="pwd" value="<%= credenciales |> Enum.at(1) %>">
 				<input type="text"
@@ -52,27 +66,49 @@
 					pattern=".{1,}"
 					required
 					aria-label="Respuesta"
-					accept-charset="UTF-8"/>
+					title="3 characters minimum"
+					autofocus="autofocus" onfocus="this.select()"
+					maxlength="30"/>
 				<%=  for entrada <- historial do  %>
 					<input type="hidden" name="entrada" value="<%= entrada %>">
 				<%  end  %>
-				<button class="todo-button" type="submit" value="Add new item" id="add-new-item" aria-label="Add new Todo item">
+				<button class="todo-button" type="submit" value="Add new item" id="add-new-item" aria-label="Add new WordChain item">
 				<i class="fas fa-plus-square"></i>
 				</button>
 			</form>
 		</div>
-		<div class="todo-container">
-			<h2>Historial</h2>
-			<%=  for entrada <- historial do  %>
-				<ul class="todo-list">
-					<div class="todo" style="display: flex;">
-						<li  class="todo-item"><%= entrada %></li>
-					</div>
-				</ul>
-			<%  end  %>
+		<div class="center-div" id="history-container">
+			<div class="todo-container" id="history-div">
+				<h2>Historial</h2>
+				<%=  for entrada <- historial do  %>
+					<ul class="todo-list">
+						<div class="todo" style="display: flex;">
+							<li  class="todo-item"><%= entrada %></li>
+						</div>
+					</ul>
+				<%  end  %>
+			</div>
 		</div>
 		<form action="/">
-			<button type="submit" class="btn btn-primary">Logout</button>
+				<button type="submit" class="btn btn-primary form-button">
+					Logout
+					<i class="fa fa-ban" aria-hidden="true"></i>
+				</button>
 		</form>
+
+	<div class="div-center"> 
+		<div class="wrap-collabsible"> 
+			<input id="collapsible" class="toggle" type="checkbox"> 
+			<label for="collapsible" class="lbl-toggle">
+				Ayuda <i class="fa fa-question-circle" aria-hidden="true"></i>
+			</label>
+			<div class="collapsible-content">
+				<div class="content-inner">
+					<p> Contesta con una palabra que empieze con la última letra de la anterior.
+						Recuerda no usar mayúsculas, incluir tildes y que la palabra esté reconocida por la RAE!</p>
+				</div>
+			</div>
+		</div>
+	</div>
 	</body>
 </html>

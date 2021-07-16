@@ -15,11 +15,11 @@
 		Javier Cancela Mato,
 		Description: Simple WordChain PWA with Elixir backend">
 		<link rel="icon" type="image/x-icon" href="./static/icon.png" />
-		<link defer
+		<link
 		href="https://fonts.googleapis.com/css?family=Poppins&display=swap"
 		rel="stylesheet"
 		/>
-		<link defer
+		<link
 		rel="stylesheet"
 		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
 		integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
@@ -42,13 +42,13 @@
 				}
 		</script>
 		<header>
-		<h1>Palabras Encadenadas</h1> <!--Test de referencia: (encadenadas), celdillas encadenadas, (celdillas encadenadas), encadenadas, (encadenadas), celdillas encadenadas.-->
+		<h1>Palabras Encadenadas</h1>
 		</header>
 		<div class="login-flex"> 
 			<div class="center-div" id="login-div">
-				<h2>Login</h2>
+				<h2>Signup</h2>
 				<h2 class="error"><%= error %></h2>
-				<form method="POST" action="/login" id="login-form">
+				<form method="POST" action="/signup" id="login-form">
 					<input type="text"
 						id="username"
 						placeholder="Nombre"
@@ -67,20 +67,19 @@
 						title="3 characters minimum"/>
 					<div class="button-div">
 						<button class="todo-button form-button" type="submit" value="Add new item" id="add-new-item" aria-label="Add new WordChain item">
-							Login
-							<i class="fas fa-sign-in-alt"></i>
+							Register
+							<i class="fas fa-address-book"></i>
 						</button>
 					</div>
 					</button>
 				</form>
-				<form method="GET" action="/signup" class="signup-link">
-					<button class="todo-button form-button" href="/signup" aria-label="Register new user">
-						Signup
-						<i class="fas fa-address-book"></i>
+				<form method="GET" action="/" class="signup-link">
+					<button class="todo-button form-button" href="/" aria-label="Login link">
+						Login
+						<i class="fas fa-sign-in-alt"></i>
 					</button>
 				</form>
 			</div>
 		</div>
-		
 	</body>
 </html>

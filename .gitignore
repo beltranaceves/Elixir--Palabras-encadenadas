@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/elixir
 # Edit at https://www.gitignore.io/?templates=elixir
 
@@ -17,3 +16,7 @@ erl_crash.dump
 ### Elixir Patch ###
 
 # End of https://www.gitignore.io/api/elixir
+
+
+**.DS_Store
+/docs/html
